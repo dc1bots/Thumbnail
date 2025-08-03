@@ -23,13 +23,12 @@ async def fwd_video(bot, m):
 @bot.on_message(filters.forwarded & filters.media_group)
 async def fwd_album(bot, m): media_groups.setdefault(m.media_group_id, []).append(m)
     
-@bot.on_message(filters.text)
+@bot.on_message(filters.text & filters.regex(r"^done$"))
 async def flush(bot, m):
-    target_chat_id = m.chat.id
     for g, msgs in list(media_groups.items()):
         for msg in sorted(msgs, key=lambda x: x.message_id):
             if msg.video:
-                await process_video(bot, msg, target_chat_id)
+                await process_video(bot, msg, m.chat.id)
         del media_groups[g]
 
 async def process_video(bot, msg, target):
