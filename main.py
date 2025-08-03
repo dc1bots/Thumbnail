@@ -53,7 +53,7 @@ async def copy_all_messages(bot, user_id):
     if not state: return
     source, target = int(state["source"]), int(state["target"])
     change_thumb = state["thumb_choice"]
-    async for msg in bot.iter_chat_history(source, reverse=True):
+    async for msg in bot.get_chat_history(source, reverse=True):
         try:
             if msg.video and change_thumb:
                 await process_video(bot, msg, target)
@@ -70,7 +70,7 @@ async def handle_copy_flow(bot, message):
 
     if message.text.startswith("/copyall"):
         user_state[uid] = {}
-        sent = await message.reply("🤖 Is the bot admin in both channels? (/yes//no)")
+        sent = await message.reply("🤖 Is the bot admin in both channels? \n /yes or  /no")
         msg_refs[uid] = sent
         return
 
@@ -97,7 +97,7 @@ async def handle_copy_flow(bot, message):
 
     if "source" not in state:
         state["source"]=txt
-        await ref.edit("🎬 Do you want to change video thumbnails? (/yes//no)")
+        await ref.edit("🎬 Do you want to change video thumbnails?\n /yes or  /no")
         user_state[uid]=state
         return
 
