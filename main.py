@@ -14,7 +14,11 @@ async def get_duration(f): return float((await asyncio.get_event_loop().run_in_e
     stdout=subprocess.PIPE, stderr=subprocess.STDOUT))).stdout)
 
 @bot.on_message(filters.forwarded & filters.video)
-async def fwd_video(bot, m): media_groups.setdefault(m.media_group_id, []).append(m) if m.media_group_id else await process(bot, m)
+async def fwd_video(bot, m):
+    if m.media_group_id:
+        media_groups.setdefault(m.media_group_id, []).append(m)
+    else:
+        await process_video(bot, m, m.chat.id)
     
 @bot.on_message(filters.forwarded & filters.media_group)
 async def fwd_album(bot, m): media_groups.setdefault(m.media_group_id, []).append(m)
