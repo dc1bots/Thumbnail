@@ -25,7 +25,7 @@ async def flush(bot, m):
     for g, msgs in list(media_groups.items()):
         for msg in sorted(msgs, key=lambda x: x.message_id):
             if msg.video:
-                await process(bot, msg, target_chat_id)
+                await process_video(bot, msg, target_chat_id)
         del media_groups[g]
 
 async def process_video(bot, msg, target):
